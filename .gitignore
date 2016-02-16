@@ -1,3 +1,4 @@
 blitzrpythonclient.egg-info/
 build/
 dist/
+*.pyc
