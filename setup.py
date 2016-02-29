@@ -11,8 +11,8 @@ config = {
     'url': 'URL to get it at.',
     'download_url': 'Where to download it.',
     'author_email': 'contact@blitzr.com',
-    'version': '0.1',
-    'install_requires': ['nose', 'requests'],
+    'version': '0.1.0',
+    'install_requires': ['requests'],
     'packages': ['blitzrpythonclient'],
     'scripts': [],
     'name': 'blitzrpythonclient'
