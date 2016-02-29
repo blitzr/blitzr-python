@@ -8,14 +8,14 @@ except ImportError:
 config = {
     'description': 'Blitzr Python Client',
     'author': 'Blitzr',
-    'url': 'https://github.com/blitzr/blitzrpythonclient',
-    'download_url': 'https://github.com/blitzr/blitzrpythonclient/tarball/0.1.0',
+    'url': 'https://github.com/blitzr/blitzr-python',
+    'download_url': 'https://github.com/blitzr/blitzr-python/tarball/0.1.0',
     'author_email': 'contact@blitzr.com',
     'version': '0.1.0',
     'install_requires': ['requests'],
-    'packages': ['blitzrpythonclient'],
+    'packages': ['blitzr'],
     'scripts': [],
-    'name': 'blitzrpythonclient'
+    'name': 'blitzr'
 }
 
 setup(**config)
