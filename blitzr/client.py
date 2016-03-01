@@ -26,7 +26,9 @@
     :Example:
 
     >>> from blitzr import client
+    >>>
     >>> blitzr = client.BlitzrClient(your_api_key)
+    >>>
     >>> eminem = blitzr.get_artist(slug='eminem')
     >>> print eminem.get('real_name')
     Marshall Bruce Mathers III
@@ -35,8 +37,6 @@
 
     :Example:
 
-    >>> from blitzr import client
-    >>> blitzr = client.BlitzrClient(your_api_key)
     >>> releases = blitzr.get_artist_releases(slug='eminem')
     >>> for release in releases:
     >>>     print release.get('name')
