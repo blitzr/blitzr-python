@@ -4,17 +4,17 @@
 """
     Blitzr Python Client
     ====================
- 
+
     This package makes it easy to call the Blitzr API.
-    You can refer to the official [Blitzr API reference](http://api.blitzr.com/doc) 
+    You can refer to the official [Blitzr API reference](http://api.blitzr.com/doc)
     to have more informations.
 
 
     Installation
     ------------
- 
+
     You can simply install Blitzr by pip:
-    
+
     >>> pip install blitzr
 
 
@@ -22,15 +22,15 @@
     ---------------
 
     You just need to instanciate a **BlitzrClient** and call its methods.
- 
+
     :Example:
- 
+
     >>> from blitzr import client
     >>> blitzr = client.BlitzrClient(your_api_key)
     >>> eminem = blitzr.get_artist(slug='eminem')
     >>> print eminem.get('real_name')
     Marshall Bruce Mathers III
-    
+
     The lists APIs use generators.
 
     :Example:
@@ -47,7 +47,7 @@
     Detroit Vs. Everybody
     Shady Classics Mixtape
     ...
- 
+
 """
 
 import requests
@@ -55,7 +55,7 @@ from .exceptions import (ConfigurationException, ServerException, ClientExceptio
 
 class BlitzrClient(object):
     """BlitzrClient
-    
+
     This is the only class you need to call the Blitzr API.
 
     """
@@ -79,7 +79,9 @@ class BlitzrClient(object):
             return req.json()
         except requests.exceptions.HTTPError:
             if req.status_code >= 500:
-                raise ServerException('An error occured on the Blitzr side. HTTP code: ' + str(req.status_code))
+                raise ServerException(
+                    'An error occured on the Blitzr side. HTTP code: ' + str(req.status_code)
+                    )
             elif req.status_code >= 400:
                 raise ClientException(req.json())
         except requests.exceptions.ConnectionError as exception:
@@ -96,7 +98,8 @@ class BlitzrClient(object):
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
-        :param extras: Artist extras : aliases, websites, biography, last_releases, next_events, relations
+        :param extras: Artist extras : aliases, websites, biography, last_releases,
+            next_events, relations
         :param extras_limit: Limit for iterable extras : last_releases, next_events (max is 10)
         :type uuid: string
         :type slug: string
@@ -158,14 +161,15 @@ class BlitzrClient(object):
             if len(bands) < limit:
                 break
 
-    def get_artist_biography(self, uuid=None, slug=None, lang=None, html_format=False, url_scheme=None):
+    def get_artist_biography(self, uuid=None, slug=None, lang=None, html_format=False,
+                             url_scheme=None):
         """Get an Artist's biography from the Blitzr API.
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
         :param lang: Biography language (if available) (fr|en)
         :param html_format: True for HTML markup in the biography
-        :param url_scheme: Urlencoded links format ( eg: '#\/{type}\/{slug}' : '%23%2F%7Btype%7D%2F%7Bslug%7D' )
+        :param url_scheme: Urlencoded links format
         :type uuid: string
         :type slug: string
         :type lang: string
@@ -267,7 +271,8 @@ class BlitzrClient(object):
             if len(related) < limit:
                 break
 
-    def get_artist_releases(self, uuid=None, slug=None, start=0, limit=10, release_type=None, release_format=None, credited=False):
+    def get_artist_releases(self, uuid=None, slug=None, start=0, limit=10, release_type=None,
+                            release_format=None, credited=False):
         """Get an Artist's releases from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -389,7 +394,8 @@ class BlitzrClient(object):
             'slug'  : slug,
         })
 
-    def get_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None, tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
+    def get_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None,
+                   tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
         """Search Events from the Blitzr API.
 
         :param country_code: The official country code
@@ -490,13 +496,15 @@ class BlitzrClient(object):
             'service_id'    : service_id,
         })
 
-    def get_harmonia_search_by_source(self, source_name=None, source_id=None, source_filters=[], strict=False):
+    def get_harmonia_search_by_source(self, source_name=None, source_id=None, source_filters=[],
+                                      strict=False):
         """Get a Track from the Blitzr API with a external source ID.
 
         :param source_name: The source name
         :param source_id: The Track's ID in the external source
         :param source_filters: Filter the source
-        :param strict: True if you want blitzr to guess the best result for you. False if you want all matched results
+        :param strict: True if you want blitzr to guess the best result for you.
+            False if you want all matched results
         :type source_name: string
         :type source_id: string | int
         :type source_filters: array
@@ -569,7 +577,7 @@ class BlitzrClient(object):
         :param uuid: The Label UUID
         :param slug: The Label Slug
         :param html_format: True for HTML markup in the biography
-        :param url_scheme: Urlencoded links format ( eg: '#\/{type}\/{slug}' : '%23%2F%7Btype%7D%2F%7Bslug%7D' )
+        :param url_scheme: Urlencoded links format
         :type uuid: string
         :type slug: string
         :type html_format: bool
@@ -785,7 +793,8 @@ class BlitzrClient(object):
 ##          Search           ##
 ###############################
 
-    def search_artist(self, query=None, filters=[], autocomplete=True, start=0, limit=10, extras=False):
+    def search_artist(self, query=None, filters=[], autocomplete=True, start=0, limit=10,
+                      extras=False):
         """Search Artist by query and filters.
 
         :param query: Your query
@@ -819,7 +828,8 @@ class BlitzrClient(object):
             if len(artists) < limit:
                 break
 
-    def search_label(self, query=None, filters=[], autocomplete=True, start=0, limit=10, extras=False):
+    def search_label(self, query=None, filters=[], autocomplete=True, start=0, limit=10,
+                     extras=False):
         """Search Label by query and filters.
 
         :param query: Your query
@@ -853,11 +863,13 @@ class BlitzrClient(object):
             if len(labels) < limit:
                 break
 
-    def search_release(self, query=None, filters=[], autocomplete=True, start=0, limit=10, extras=False):
+    def search_release(self, query=None, filters=[], autocomplete=True, start=0,
+                       limit=10, extras=False):
         """Search Release by query and filters.
 
         :param query: Your query
-        :param filters: Filter results. Available filters : artist, tag, format_summary, year, location
+        :param filters: Filter results. Available filters : artist, tag, format_summary,
+            year, location
         :param autocomplete: Enable predictive search
         :param start: Offset for pagination
         :param limit: Size of generator batch
@@ -891,7 +903,8 @@ class BlitzrClient(object):
         """Search Track by query and filters.
 
         :param query: Your query
-        :param filters: Filter results. Available filters : artist, release, format_summary, year, location
+        :param filters: Filter results. Available filters : artist, release, format_summary,
+            year, location
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :param extras: Get extra info like number of results
@@ -918,7 +931,8 @@ class BlitzrClient(object):
             if len(tracks) < limit:
                 break
 
-    def search_city(self, query=None, autocomplete=True, latitude=None, longitude=None, start=0, limit=10):
+    def search_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
+                    start=0, limit=10):
         """Search City by query or geolocation.
 
         :param query: Your query
