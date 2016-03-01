@@ -6,7 +6,7 @@
     ====================
 
     This package makes it easy to call the Blitzr API.
-    You can refer to the official [Blitzr API reference](http://api.blitzr.com/doc)
+    You can refer to the official `Blitzr API reference <http://api.blitzr.com/doc>`_.
     to have more informations.
 
 
