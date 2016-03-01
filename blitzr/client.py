@@ -15,7 +15,7 @@
 
     You can simply install Blitzr by pip:
 
-    >>> pip install blitzr
+        pip install blitzr
 
 
     Getting Started
@@ -1123,7 +1123,39 @@ class BlitzrClient(object):
 ###############################
 
 class SearchGenerator(object):
-    """Custom Generator for Search requests, provides length compatibility."""
+    """Custom Generator for Search requests, provides length compatibility.
+
+    The only non standard generators are those returned by the search queries.
+    They are differents by their ability to retreive the total count of elements
+    to generate.
+
+    If the field **extras** of your request is set to True, which is the default state,
+    you will be able to call the **len()** method on the generator.
+
+    :Example:
+
+    >>> from blitzr import client
+    >>> blitzr = client.BlitzrClient(your_api_key)
+    >>> artists = blitzr.search_artist(query='emine', autocomplete=True)
+    >>> print len(artists)
+    80
+
+    Then it works exactly as all other generators.
+
+    :Example:
+
+    >>> for artist in artists:
+    >>>     print artist.get('name')
+    Emine
+    Emine
+    Eminem
+    Emine Krasniqi
+    Eminence
+    Eminent
+    Eminent
+    ...
+
+    """
     def __init__(self, client=None, endpoint=None, query=None, filters=[],
                  autocomplete=True, start=0, limit=10, extras=False):
         self.client = client

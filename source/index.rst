@@ -23,6 +23,15 @@ Blitzr client:
     :inherited-members:
     :show-inheritance:
 
+Search Generator:
+-----------------
+
+.. autoclass:: blitzr.client.SearchGenerator
+    :members:
+    :undoc-members:
+    :inherited-members:
+    :show-inheritance:
+
 Exceptions:
 -----------
 
