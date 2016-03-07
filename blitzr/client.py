@@ -25,9 +25,9 @@
 
     :Example:
 
-    >>> from blitzr import client
+    >>> from blitzr import BlitzrClient
     >>>
-    >>> blitzr = client.BlitzrClient(your_api_key)
+    >>> blitzr = BlitzrClient(your_api_key)
     >>>
     >>> eminem = blitzr.get_artist(slug='eminem')
     >>> print eminem.get('real_name')
@@ -1146,8 +1146,8 @@ class SearchGenerator(object):
 
     :Example:
 
-    >>> from blitzr import client
-    >>> blitzr = client.BlitzrClient(your_api_key)
+    >>> from blitzr import BlitzrClient
+    >>> blitzr = BlitzrClient(your_api_key)
     >>> artists = blitzr.search_artist(query='emine', autocomplete=True)
     >>> print len(artists)
     80
