@@ -793,8 +793,7 @@ class BlitzrClient(object):
 ##          Search           ##
 ###############################
 
-    def search_artist(self, query=None, filters=[], autocomplete=False, start=0, limit=10,
-                      extras=True):
+    def search_artist(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
 
         :param query: Your query
@@ -802,22 +801,25 @@ class BlitzrClient(object):
         :param autocomplete: Enable predictive search
         :param start: Offset for pagination
         :param limit: Size of generator batch
-        :param extras: Get extra info like number of results
         :type query: string
         :type filters: array
         :type autocomplete: bool
         :type start: int
         :type limit: int
-        :type extras: bool
         :return: Artists
-        :rtype: generator
+        :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/artist/', query,
-                               filters, autocomplete, start, limit, extras)
+        return SearchGenerator(self, 'search/artist/', {
+                'query'         : query,
+                'filters'       : ','.join(filters) if filters else None,
+                'autocomplete'  : 'true' if autocomplete else 'false',
+                'start'         : start,
+                'limit'         : limit,
+                'extras'        : 'true'
+            })
 
-    def search_label(self, query=None, filters=[], autocomplete=False, start=0, limit=10,
-                     extras=True):
+    def search_label(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
         """Search Label by query and filters.
 
         :param query: Your query
@@ -825,22 +827,26 @@ class BlitzrClient(object):
         :param autocomplete: Enable predictive search
         :param start: Offset for pagination
         :param limit: Size of generator batch
-        :param extras: Get extra info like number of results
         :type query: string
         :type filters: array
         :type autocomplete: bool
         :type start: int
         :type limit: int
-        :type extras: bool
         :return: Labels
-        :rtype: generator
+        :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/label/', query, filters,
-                               autocomplete, start, limit, extras)
+        return SearchGenerator(self, 'search/label/', {
+                'query'         : query,
+                'filters'       : ','.join(filters) if filters else None,
+                'autocomplete'  : 'true' if autocomplete else 'false',
+                'start'         : start,
+                'limit'         : limit,
+                'extras'        : 'true'
+            })
 
     def search_release(self, query=None, filters=[], autocomplete=False, start=0,
-                       limit=10, extras=True):
+                       limit=10):
         """Search Release by query and filters.
 
         :param query: Your query
@@ -849,21 +855,25 @@ class BlitzrClient(object):
         :param autocomplete: Enable predictive search
         :param start: Offset for pagination
         :param limit: Size of generator batch
-        :param extras: Get extra info like number of results
         :type query: string
         :type filters: array
         :type autocomplete: bool
         :type start: int
         :type limit: int
-        :type extras: bool
         :return: Releases
-        :rtype: generator
+        :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/release/', query, filters,
-                               autocomplete, start, limit, extras)
+        return SearchGenerator(self, 'search/release/', {
+                'query'         : query,
+                'filters'       : ','.join(filters) if filters else None,
+                'autocomplete'  : 'true' if autocomplete else 'false',
+                'start'         : start,
+                'limit'         : limit,
+                'extras'        : 'true'
+            })
 
-    def search_track(self, query=None, filters=[], start=0, limit=10, extras=True):
+    def search_track(self, query=None, filters=[], start=0, limit=10):
         """Search Track by query and filters.
 
         :param query: Your query
@@ -871,18 +881,21 @@ class BlitzrClient(object):
             year, location
         :param start: Offset for pagination
         :param limit: Size of generator batch
-        :param extras: Get extra info like number of results
         :type query: string
         :type filters: array
         :type start: int
         :type limit: int
-        :type extras: bool
         :return: Tracks
-        :rtype: generator
+        :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/track/', query, filters,
-                               None, start, limit, extras)
+        return SearchGenerator(self, 'search/track/', {
+                'query'         : query,
+                'filters'       : ','.join(filters) if filters else None,
+                'start'         : start,
+                'limit'         : limit,
+                'extras'        : 'true'
+            })
 
     def search_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
                     start=0, limit=10):
@@ -1129,8 +1142,7 @@ class SearchGenerator(object):
     They are differents by their ability to retreive the total count of elements
     to generate.
 
-    If the field **extras** of your request is set to True, which is the default state,
-    you will be able to call the **len()** method on the generator.
+    You will be able to call the **len()** method on the generator.
 
     :Example:
 
@@ -1156,16 +1168,10 @@ class SearchGenerator(object):
     ...
 
     """
-    def __init__(self, client=None, endpoint=None, query=None, filters=[],
-                 autocomplete=True, start=0, limit=10, extras=False):
+    def __init__(self, client=None, endpoint=None, params={}):
         self.client = client
         self.endpoint = endpoint
-        self.query = query
-        self.filters = filters
-        self.autocomplete = autocomplete
-        self.start = start
-        self.limit = limit
-        self.extras = extras
+        self.params = params
         self.cursor = -1
         self.results = None
         self._length = None
@@ -1179,7 +1185,7 @@ class SearchGenerator(object):
     def next(self):
         """Get next result."""
         self.cursor += 1
-        if self.results is None or self.cursor == self.limit:
+        if self.results is None or self.cursor == self.params.get('limit'):
             self._request()
             self.cursor = 0
 
@@ -1189,16 +1195,9 @@ class SearchGenerator(object):
             raise StopIteration()
 
     def _request(self):
-        answer = self.client._request(self.endpoint, {
-            'query'         : self.query,
-            'filters'       : ','.join(self.filters) if self.filters else None,
-            'autocomplete'  : 'true' if self.autocomplete else 'false',
-            'start'         : self.start,
-            'limit'         : self.limit,
-            'extras'        : 'true' if self.extras else 'false'
-        })
-        self.start += self.limit
-        if self.extras:
+        answer = self.client._request(self.endpoint, self.params)
+        self.params['start'] += self.params.get('limit')
+        if self.params.get('extras') == 'true':
             self.results = answer.get('results')
             self._length = answer.get('total')
         else:
@@ -1208,7 +1207,7 @@ class SearchGenerator(object):
         "This method returns the total number of elements"
         if self._length or self._length == 0:
             return self._length
-        elif self.extras:
+        elif self.params.get('extras') == 'true':
             self._request()
             return self._length
         else:
