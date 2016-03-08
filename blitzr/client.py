@@ -13,7 +13,7 @@
     Installation
     ------------
 
-    You can simply install Blitzr by pip:
+    You can simply install Blitzr by **pip**:
 
         pip install blitzr
 
@@ -33,7 +33,11 @@
     >>> print eminem.get('real_name')
     Marshall Bruce Mathers III
 
-    The lists APIs use generators.
+    You can call list APIs by two methods: with or without a generator.
+
+    The basic methods like **get_artist_releases** returns a list or X desired releases from
+    the given artist. You will have to manage the pagination by yourself with the **start** and
+    **limit** parameters (defaults are start=0 and limit=10).
 
     :Example:
 
@@ -46,7 +50,39 @@
     Phenomenal
     Detroit Vs. Everybody
     Shady Classics Mixtape
-    ...
+    Headlights
+    Guts Over Fear
+    The Monster
+    Berzerk
+
+    The second option will make the pagination easier. You can call the **iter_artist_releases**
+    to get a **generator**. This generator will call automatically the API when you reach the end
+    of the current items list. So you just have to iterate on this generator to get all the
+    documents to retrieve. The parameter **limit** here is the number of elements to retrieve
+    by query in the generator.
+
+    :Example:
+
+    >>> releases = blitzr.iter_artist_releases(slug='eminem')
+    >>> for release in releases:
+    >>>     print release.get('name')
+    The Vinyl LPs
+    MNEP
+    Live From Comerica Park
+    Phenomenal
+    Detroit Vs. Everybody
+    Shady Classics Mixtape
+    Headlights
+    Guts Over Fear
+    The Monster
+    Berzerk
+    Rap God
+    Survival
+    The Marshall Mathers LP 2
+    E
+    Shady Unit
+    Eminem The Marshall Mathers
+    ... and more until the end
 
 """
 
