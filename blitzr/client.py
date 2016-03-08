@@ -132,7 +132,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_artist_aliases(self, uuid=None, slug=None):
+    def iter_artist_aliases(self, uuid=None, slug=None):
         """Get an Artist's aliases from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -168,7 +168,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_artist_bands(self, uuid=None, slug=None, start=0, limit=10):
+    def iter_artist_bands(self, uuid=None, slug=None, start=0, limit=10):
         """Get an Artist's bands from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -184,7 +184,7 @@ class BlitzrClient(object):
 
         """
         while True:
-            bands = get_artist_bands(uuid, slug, start, limit)
+            bands = self.get_artist_bands(uuid, slug, start, limit)
             for band in bands:
                 yield band
             start += limit
@@ -239,7 +239,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_artist_events(self, uuid=None, slug=None, start=0, limit=10):
+    def iter_artist_events(self, uuid=None, slug=None, start=0, limit=10):
         """Get an Artist's events from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -284,7 +284,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_artist_members(self, uuid=None, slug=None, start=0, limit=10):
+    def iter_artist_members(self, uuid=None, slug=None, start=0, limit=10):
         """Get a Band's members from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -329,7 +329,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_artist_related(self, uuid=None, slug=None, start=0, limit=10):
+    def iter_artist_related(self, uuid=None, slug=None, start=0, limit=10):
         """Get related Artists from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -352,23 +352,23 @@ class BlitzrClient(object):
             if len(related) < limit:
                 break
 
-    def get_artist_releases(self, uuid=None, slug=None, start=0, limit=10, type=None,
-                            format=None, credited=False):
+    def get_artist_releases(self, uuid=None, slug=None, start=0, limit=10, release_type=None,
+                            release_format=None, credited=False):
         """Get an Artist's releases from the Blitzr API.
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
         :param start: Offset for pagination
         :param limit: Limit for pagination
-        :param type: Release type (official|unofficial|all)
-        :param format: Release format (album|single|live|all)
+        :param release_type: Release type (official|unofficial|all)
+        :param release_format: Release format (album|single|live|all)
         :param credited: Releases where artist is credited (not main releases)
         :type uuid: string
         :type slug: string
         :type start: int
         :type limit: int
-        :type type: string
-        :type format: string
+        :type release_type: string
+        :type release_format: string
         :type credited: bool
         :return: Releases
         :rtype: list
@@ -379,42 +379,43 @@ class BlitzrClient(object):
             'slug'      : slug,
             'start'     : start,
             'limit'     : limit,
-            'type'      : type,
-            'format'    : format,
+            'type'      : release_type,
+            'format'    : release_format,
             'credited'  : 'true' if credited else 'false'
         })
 
-    def generate_artist_releases(self, uuid=None, slug=None, start=0, limit=10,
-                                 type=None, format=None, credited=False):
+    def iter_artist_releases(self, uuid=None, slug=None, start=0, limit=10,
+                             release_type=None, release_format=None, credited=False):
         """Get an Artist's releases from the Blitzr API.
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
         :param start: Offset for pagination
         :param limit: Size of generator batch
-        :param type: Release type (official|unofficial|all)
-        :param format: Release format (album|single|live|all)
+        :param release_type: Release type (official|unofficial|all)
+        :param release_format: Release format (album|single|live|all)
         :param credited: Releases where artist is credited (not main releases)
         :type uuid: string
         :type slug: string
         :type start: int
         :type limit: int
-        :type type: string
-        :type format: string
+        :type release_type: string
+        :type release_format: string
         :type credited: bool
         :return: Releases
         :rtype: generator
 
         """
         while True:
-            releases = self.get_artist_releases(uuid, slug, start, limit, type, format, credited)
+            releases = self.get_artist_releases(uuid, slug, start, limit, release_type,
+                                                release_format, credited)
             for release in releases:
                 yield release
             start += limit
             if len(releases) < limit:
                 break
 
-    def get_artist_similar(self, uuid=None, slug=None, filters=[], start=0, limit=10):
+    def get_artist_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Artists from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -424,22 +425,26 @@ class BlitzrClient(object):
         :param limit: Limit for pagination
         :type uuid: string
         :type slug: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Artists
         :rtype: list
 
         """
-        return self._request('artist/similars/', {
+        params = {
             'uuid'      : uuid,
             'slug'      : slug,
-            'filters'   : ','.join(filters)if filters else None,
             'start'     : start,
             'limit'     : limit
-        })
+        }
 
-    def generate_artist_similar(self, uuid=None, slug=None, filters=[], start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('artist/similars/', params)
+
+    def iter_artist_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Artists from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -449,7 +454,7 @@ class BlitzrClient(object):
         :param limit: Size of generator batch
         :type uuid: string
         :type slug: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Artists
@@ -496,7 +501,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_artist_websites(self, uuid=None, slug=None):
+    def iter_artist_websites(self, uuid=None, slug=None):
         """Get Artist's websites from the Blitzr API.
 
         :param uuid: The Artist UUID
@@ -575,8 +580,8 @@ class BlitzrClient(object):
             'limit'         : limit
         })
 
-    def generate_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None,
-                   tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
+    def iter_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None,
+                    tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
         """Search Events from the Blitzr API.
 
         :param country_code: The official country code
@@ -690,8 +695,8 @@ class BlitzrClient(object):
             'strict'            : 'true' if strict else 'false'
         })
 
-    def generate_harmonia_search_by_source(self, source_name=None, source_id=None, source_filters=[],
-                                      strict=False):
+    def iter_harmonia_search_by_source(self, source_name=None, source_id=None, source_filters=[],
+                                       strict=False):
         """Get a Track from the Blitzr API with a external source ID.
 
         :param source_name: The source name
@@ -707,7 +712,8 @@ class BlitzrClient(object):
         :rtype: generator
 
         """
-        for track in self.get_harmonia_search_by_source(source_name, source_id, source_filters, strict):
+        for track in self.get_harmonia_search_by_source(source_name, source_id, source_filters,
+                                                        strict):
             yield track
 
 ###############################
@@ -758,7 +764,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_label_artists(self, uuid=None, slug=None, start=0, limit=10):
+    def iter_label_artists(self, uuid=None, slug=None, start=0, limit=10):
         """Get a Label's artists from the Blitzr API.
 
         :param uuid: The Label UUID
@@ -803,19 +809,19 @@ class BlitzrClient(object):
             'url_scheme' : url_scheme
         })
 
-    def get_label_releases(self, uuid=None, slug=None, format=None, start=0, limit=10):
+    def get_label_releases(self, uuid=None, slug=None, release_format=None, start=0, limit=10):
         """Get a Label's releases from the Blitzr API.
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
-        :param format: Release format (album|single|live|all)
+        :param release_format: Release format (album|single|live|all)
         :param start: Offset for pagination
         :param limit: Limit for pagination
         :type uuid: string
         :type slug: string
         :type start: int
         :type limit: int
-        :type format: string
+        :type release_format: string
         :return: Releases
         :rtype: list
 
@@ -823,37 +829,37 @@ class BlitzrClient(object):
         return self._request('label/releases/', {
             'uuid'      : uuid,
             'slug'      : slug,
-            'format'    : format,
+            'format'    : release_format,
             'start'     : start,
             'limit'     : limit
         })
-        
-    def generate_label_releases(self, uuid=None, slug=None, format=None, start=0, limit=10):
+
+    def iter_label_releases(self, uuid=None, slug=None, release_format=None, start=0, limit=10):
         """Get a Label's releases from the Blitzr API.
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
-        :param format: Release format (album|single|live|all)
+        :param release_format: Release format (album|single|live|all)
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :type uuid: string
         :type slug: string
         :type start: int
         :type limit: int
-        :type format: string
+        :type release_format: string
         :return: Releases
         :rtype: generator
 
         """
         while True:
-            releases = self.get_label_releases(uuid, slug, format, start, limit)
+            releases = self.get_label_releases(uuid, slug, release_format, start, limit)
             for release in releases:
                 yield release
             start += limit
             if len(releases) < limit:
                 break
 
-    def get_label_similar(self, uuid=None, slug=None, start=0, limit=10):
+    def get_label_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Labels from the Blitzr API.
 
         :param uuid: The Label UUID
@@ -863,21 +869,26 @@ class BlitzrClient(object):
         :param limit: Limit for pagination
         :type uuid: string
         :type slug: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Labels
         :rtype: list
 
         """
-        return self._request('label/similars/', {
-            'uuid'  : uuid,
-            'slug'  : slug,
-            'start' : start,
-            'limit' : limit
-        })
-        
-    def generate_label_similar(self, uuid=None, slug=None, start=0, limit=10):
+        params = {
+            'uuid'      : uuid,
+            'slug'      : slug,
+            'start'     : start,
+            'limit'     : limit
+        }
+
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('label/similars/', params)
+
+    def iter_label_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Labels from the Blitzr API.
 
         :param uuid: The Label UUID
@@ -887,7 +898,7 @@ class BlitzrClient(object):
         :param limit: Size of generator batch
         :type uuid: string
         :type slug: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Labels
@@ -895,7 +906,7 @@ class BlitzrClient(object):
 
         """
         while True:
-            labels = self.get_label_similar(uuid, slug, start, limit)
+            labels = self.get_label_similar(uuid, slug, filters, start, limit)
             for label in labels:
                 yield label
             start += limit
@@ -918,7 +929,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_label_websites(self, uuid=None, slug=None):
+    def iter_label_websites(self, uuid=None, slug=None):
         """Get Label's websites from the Blitzr API.
 
         :param uuid: The Label UUID
@@ -955,7 +966,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_radio_artist(self, uuid=None, slug=None, limit=10):
+    def iter_radio_artist(self, uuid=None, slug=None, limit=10):
         """Get an Artist's Radio, a List of Track from the given Artist discography.
 
         :param uuid: The Artist UUID
@@ -990,7 +1001,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_radio_artist_similar(self, uuid=None, slug=None, limit=10):
+    def iter_radio_artist_similar(self, uuid=None, slug=None, limit=10):
         """Get an Artist Similar Radio, a List of Track from the Similar Artist discography.
 
         :param uuid: The Artist UUID
@@ -1025,7 +1036,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_radio_label(self, uuid=None, slug=None, limit=10):
+    def iter_radio_label(self, uuid=None, slug=None, limit=10):
         """Get a Label's Radio, a List of Track from the given Label discography.
 
         :param uuid: The Label UUID
@@ -1057,7 +1068,7 @@ class BlitzrClient(object):
             'limit' : limit
         })
 
-    def generate_radio_tag(self, slug=None, limit=10):
+    def iter_radio_tag(self, slug=None, limit=10):
         """Get a Tag Radio, a List of Track from the given Tag catalog.
 
         :param slug: The Tag Slug
@@ -1107,7 +1118,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_release_sources(self, uuid=None, slug=None):
+    def iter_release_sources(self, uuid=None, slug=None):
         """Get the Release Ids for other Services. Slug or UUID are mandatory.
 
         :param uuid: The Release UUID
@@ -1125,7 +1136,7 @@ class BlitzrClient(object):
 ##          Search           ##
 ###############################
 
-    def search_artist(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
+    def search_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
 
         :param query: Your query
@@ -1134,7 +1145,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Limit for pagination
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1142,16 +1153,20 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('search/artist/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
 
-    def search_generate_artist(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('search/artist/', params)
+
+    def search_iter_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
 
         :param query: Your query
@@ -1160,7 +1175,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1168,16 +1183,20 @@ class BlitzrClient(object):
         :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/artist/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
 
-    def search_label(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return SearchGenerator(self, 'search/artist/', params)
+
+    def search_label(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Label by query and filters.
 
         :param query: Your query
@@ -1186,7 +1205,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Limit for pagination
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1194,16 +1213,20 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('search/label/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
 
-    def search_generate_label(self, query=None, filters=[], autocomplete=False, start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('search/label/', params)
+
+    def search_iter_label(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Label by query and filters.
 
         :param query: Your query
@@ -1212,7 +1235,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1220,16 +1243,20 @@ class BlitzrClient(object):
         :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/label/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
 
-    def search_release(self, query=None, filters=[], autocomplete=False, start=0,
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return SearchGenerator(self, 'search/label/', params)
+
+    def search_release(self, query=None, filters={}, autocomplete=False, start=0,
                        limit=10):
         """Search Release by query and filters.
 
@@ -1240,7 +1267,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Limit for pagination
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1248,17 +1275,21 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('search/release/', {
-                'query'         : query,
-                'filters'       : ','.join(filters) if filters else None,
-                'autocomplete'  : 'true' if autocomplete else 'false',
-                'start'         : start,
-                'limit'         : limit,
-                'extras'        : 'true'
-            })
+        params = {
+            'query'         : query,
+            'autocomplete'  : 'true' if autocomplete else 'false',
+            'start'         : start,
+            'limit'         : limit,
+            'extras'        : 'true'
+        }
 
-    def search_generate_release(self, query=None, filters=[], autocomplete=False, start=0,
-                       limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('search/release/', params)
+
+    def search_iter_release(self, query=None, filters={}, autocomplete=False, start=0,
+                            limit=10):
         """Search Release by query and filters.
 
         :param query: Your query
@@ -1268,7 +1299,7 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type autocomplete: bool
         :type start: int
         :type limit: int
@@ -1276,16 +1307,20 @@ class BlitzrClient(object):
         :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/release/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
 
-    def search_track(self, query=None, filters=[], start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return SearchGenerator(self, 'search/release/', params)
+
+    def search_track(self, query=None, filters={}, start=0, limit=10):
         """Search Track by query and filters.
 
         :param query: Your query
@@ -1294,22 +1329,26 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Limit for pagination
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Tracks
         :rtype: list
 
         """
-        return self._request('search/track/', {
-                'query'         : query,
-                'filters'       : ','.join(filters) if filters else None,
-                'start'         : start,
-                'limit'         : limit,
-                'extras'        : 'true'
-            })
+        params = {
+            'query'         : query,
+            'start'         : start,
+            'limit'         : limit,
+            'extras'        : 'true'
+        }
 
-    def search_generate_track(self, query=None, filters=[], start=0, limit=10):
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return self._request('search/track/', params)
+
+    def search_iter_track(self, query=None, filters={}, start=0, limit=10):
         """Search Track by query and filters.
 
         :param query: Your query
@@ -1318,20 +1357,24 @@ class BlitzrClient(object):
         :param start: Offset for pagination
         :param limit: Size of generator batch
         :type query: string
-        :type filters: array
+        :type filters: dict
         :type start: int
         :type limit: int
         :return: Tracks
         :rtype: SearchGenerator
 
         """
-        return SearchGenerator(self, 'search/track/', {
+        params = {
             'query'         : query,
-            'filters'       : ','.join(filters) if filters else None,
             'start'         : start,
             'limit'         : limit,
             'extras'        : 'true'
-        })
+        }
+
+        for f_name, f_value in filters.iteritems():
+            params['filters[%s]' % (f_name)] = f_value
+
+        return SearchGenerator(self, 'search/track/', params)
 
     def search_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
                     start=0, limit=10):
@@ -1362,8 +1405,8 @@ class BlitzrClient(object):
             'limit'         : limit
         })
 
-    def search_generate_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
-                    start=0, limit=10):
+    def search_iter_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
+                         start=0, limit=10):
         """Search City by query or geolocation.
 
         :param query: Your query
@@ -1409,7 +1452,7 @@ class BlitzrClient(object):
             'limit'         : limit
         })
 
-    def search_generate_country(self, country_code, start=0, limit=10):
+    def search_iter_country(self, country_code, start=0, limit=10):
         """Search Country by country code.
 
         :param country_code:  Official country code
@@ -1452,7 +1495,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_shop_artist(self, product_type, uuid=None, slug=None):
+    def iter_shop_artist(self, product_type, uuid=None, slug=None):
         """Get Artist's related products from the Blitzr API.
 
         :param product_type: The product's type (cd|lp|mp3|merch)
@@ -1486,7 +1529,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_shop_label(self, product_type, uuid=None, slug=None):
+    def iter_shop_label(self, product_type, uuid=None, slug=None):
         """Get Label's related products from the Blitzr API.
 
         :param product_type: The product's type (cd|lp|merch)
@@ -1520,7 +1563,7 @@ class BlitzrClient(object):
             'slug'  : slug
         })
 
-    def generate_shop_release(self, product_type, uuid=None, slug=None):
+    def iter_shop_release(self, product_type, uuid=None, slug=None):
         """Get Release's related products from the Blitzr API.
 
         :param product_type: The product's type (cd|lp|mp3)
@@ -1549,7 +1592,7 @@ class BlitzrClient(object):
             'uuid'  : uuid
         })
 
-    def generate_shop_track(self, uuid=None):
+    def iter_shop_track(self, uuid=None):
         """Get Track's related products from the Blitzr API.
 
         :param uuid: The Track UUID
@@ -1596,8 +1639,8 @@ class BlitzrClient(object):
             'start' : start,
             'limit' : limit
         })
-        
-    def generate_tag_artists(self, slug=None, start=0, limit=10):
+
+    def iter_tag_artists(self, slug=None, start=0, limit=10):
         """Get Artists from a Tag
 
         :param slug: The Tag Slug
@@ -1636,8 +1679,8 @@ class BlitzrClient(object):
             'start' : start,
             'limit' : limit
         })
-        
-    def generate_tag_releases(self, slug=None, start=0, limit=10):
+
+    def iter_tag_releases(self, slug=None, start=0, limit=10):
         """Get Releases from a Tag
 
         :param slug: The Tag Slug
@@ -1688,7 +1731,7 @@ class BlitzrClient(object):
             'uuid'  : uuid
         })
 
-    def generate_track_sources(self, uuid=None):
+    def iter_track_sources(self, uuid=None):
         """Get a Track's Sources from the Blitzr API.
 
         :param uuid: The Track UUID
@@ -1718,7 +1761,7 @@ class SearchGenerator(object):
 
     >>> from blitzr import BlitzrClient
     >>> blitzr = BlitzrClient(your_api_key)
-    >>> artists = blitzr.search_generate_artist(query='emine', autocomplete=True)
+    >>> artists = blitzr.search_iter_artist(query='emine', autocomplete=True)
     >>> print len(artists)
     80
 
