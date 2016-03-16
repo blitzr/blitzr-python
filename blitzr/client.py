@@ -475,8 +475,8 @@ class BlitzrClient(object):
             'limit'     : limit
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('artist/similars/', params)
 
@@ -919,8 +919,8 @@ class BlitzrClient(object):
             'limit'     : limit
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('label/similars/', params)
 
@@ -1197,8 +1197,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('search/artist/', params)
 
@@ -1227,8 +1227,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return SearchGenerator(self, 'search/artist/', params)
 
@@ -1257,8 +1257,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('search/label/', params)
 
@@ -1287,8 +1287,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return SearchGenerator(self, 'search/label/', params)
 
@@ -1319,8 +1319,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('search/release/', params)
 
@@ -1351,8 +1351,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return SearchGenerator(self, 'search/release/', params)
 
@@ -1379,8 +1379,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return self._request('search/track/', params)
 
@@ -1407,8 +1407,8 @@ class BlitzrClient(object):
             'extras'        : 'true'
         }
 
-        for f_name, f_value in filters.iteritems():
-            params['filters[%s]' % (f_name)] = f_value
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
         return SearchGenerator(self, 'search/track/', params)
 
