@@ -1202,7 +1202,7 @@ class BlitzrClient(object):
 
         return self._request('search/artist/', params)
 
-    def search_iter_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
+    def iter_search_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
 
         :param query: Your query
@@ -1262,7 +1262,7 @@ class BlitzrClient(object):
 
         return self._request('search/label/', params)
 
-    def search_iter_label(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
+    def iter_search_label(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Label by query and filters.
 
         :param query: Your query
@@ -1324,7 +1324,7 @@ class BlitzrClient(object):
 
         return self._request('search/release/', params)
 
-    def search_iter_release(self, query=None, filters={}, autocomplete=False, start=0,
+    def iter_search_release(self, query=None, filters={}, autocomplete=False, start=0,
                             limit=10):
         """Search Release by query and filters.
 
@@ -1384,7 +1384,7 @@ class BlitzrClient(object):
 
         return self._request('search/track/', params)
 
-    def search_iter_track(self, query=None, filters={}, start=0, limit=10):
+    def iter_search_track(self, query=None, filters={}, start=0, limit=10):
         """Search Track by query and filters.
 
         :param query: Your query
@@ -1441,7 +1441,7 @@ class BlitzrClient(object):
             'limit'         : limit
         })
 
-    def search_iter_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
+    def iter_search_city(self, query=None, autocomplete=True, latitude=None, longitude=None,
                          start=0, limit=10):
         """Search City by query or geolocation.
 
@@ -1488,7 +1488,7 @@ class BlitzrClient(object):
             'limit'         : limit
         })
 
-    def search_iter_country(self, country_code, start=0, limit=10):
+    def iter_search_country(self, country_code, start=0, limit=10):
         """Search Country by country code.
 
         :param country_code:  Official country code
@@ -1797,7 +1797,7 @@ class SearchGenerator(object):
 
     >>> from blitzr import BlitzrClient
     >>> blitzr = BlitzrClient(your_api_key)
-    >>> artists = blitzr.search_iter_artist(query='emine', autocomplete=True)
+    >>> artists = blitzr.iter_search_artist(query='emine', autocomplete=True)
     >>> print len(artists)
     80
 
