@@ -11,7 +11,7 @@ config = {
     'url': 'https://github.com/blitzr/blitzr-python',
     'download_url': 'https://github.com/blitzr/blitzr-python/tarball/1.0.2',
     'author_email': 'contact@blitzr.com',
-    'version': '1.0.2',
+    'version': '1.0.3',
     'install_requires': ['requests'],
     'packages': ['blitzr'],
     'scripts': [],
