@@ -1118,6 +1118,41 @@ class BlitzrClient(object):
         for track in self.get_radio_tag(slug, limit):
             yield track
 
+    def get_radio_event(self, uuid=None, slug=None, limit=10):
+        """Get a Event's Radio, a List of Track from the given Event discography.
+
+        :param uuid: The Event UUID
+        :param slug: The Event Slug
+        :param limit: The number of Tracks needed
+        :type uuid: string
+        :type slug: string
+        :type limit: int
+        :return: Tracks
+        :rtype: list
+
+        """
+        return self._request('radio/label/', {
+            'uuid'  : uuid,
+            'slug'  : slug,
+            'limit' : limit
+        })
+
+    def iter_radio_event(self, uuid=None, slug=None, limit=10):
+        """Get a Event's Radio, a List of Track from the given Event discography.
+
+        :param uuid: The Event UUID
+        :param slug: The Event Slug
+        :param limit: Size of the generator batch
+        :type uuid: string
+        :type slug: string
+        :type limit: int
+        :return: Tracks
+        :rtype: generator
+
+        """
+        for track in self.get_radio_label(uuid, slug, limit):
+            yield track
+
 ###############################
 ##         Releases          ##
 ###############################
@@ -1297,8 +1332,8 @@ class BlitzrClient(object):
         """Search Release by query and filters.
 
         :param query: Your query
-        :param filters: Filter results. Available filters : artist, tag, format_summary,
-            year, location
+        :param filters: Filter results. Available filters : artist, artist.uuid, tag, format_summary,
+            year, location, label, label.uuid
         :param autocomplete: Enable predictive search
         :param start: Offset for pagination
         :param limit: Limit for pagination
