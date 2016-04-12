@@ -1150,7 +1150,7 @@ class BlitzrClient(object):
         :rtype: generator
 
         """
-        for track in self.get_radio_label(uuid, slug, limit):
+        for track in self.get_radio_event(uuid, slug, limit):
             yield track
 
 ###############################
