@@ -1131,7 +1131,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/label/', {
+        return self._request('radio/event/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'limit' : limit
