@@ -298,6 +298,22 @@ class BlitzrClient(object):
             if len(events) < limit:
                 break
 
+    def get_artist_harmonia(self, uuid=None, slug=None):
+        """Get an Artist's identifiers in other databases.
+
+        :param uuid: The Artist UUID
+        :param slug: The Artist Slug
+        :type uuid: string
+        :type slug: string
+        :return: Identifiers
+        :rtype: dictionary
+
+        """
+        return self._request('artist/harmonia/', {
+            'uuid'  : uuid,
+            'slug'  : slug,
+        })
+
     def get_artist_members(self, uuid=None, slug=None, start=0, limit=10):
         """Get a Band's members from the Blitzr API.
 
@@ -845,6 +861,22 @@ class BlitzrClient(object):
             'url_scheme' : url_scheme
         })
 
+    def get_label_harmonia(self, uuid=None, slug=None):
+        """Get a Label's identifiers in other databases.
+
+        :param uuid: The Label UUID
+        :param slug: The Label Slug
+        :type uuid: string
+        :type slug: string
+        :return: Identifiers
+        :rtype: dictionary
+
+        """
+        return self._request('label/harmonia/', {
+            'uuid'  : uuid,
+            'slug'  : slug,
+        })
+
     def get_label_releases(self, uuid=None, slug=None, release_format=None, start=0, limit=10):
         """Get a Label's releases from the Blitzr API.
 
@@ -1206,6 +1238,60 @@ class BlitzrClient(object):
 ###############################
 ##          Search           ##
 ###############################
+
+    def search(self, query=None, types=[], autocomplete=False, start=0, limit=10):
+        """Search multiple entities.
+
+        :param query: Your query
+        :param type: Set requested types. Available types : artist, label, release, track
+        :param autocomplete: Enable predictive search
+        :param start: Offset for pagination
+        :param limit: Limit for pagination
+        :type query: string
+        :type type: array
+        :type autocomplete: bool
+        :type start: int
+        :type limit: int
+        :return: Results
+        :rtype: list
+
+        """
+
+        return self._request('search/', {
+            'query'         : query,
+            'type'          : ','.join(types) if types else None,
+            'autocomplete'  : 'true' if autocomplete else 'false',
+            'start'         : start,
+            'limit'         : limit,
+            'extras'        : 'true'
+        })
+
+    def iter_search(self, query=None, types=[], autocomplete=False, start=0, limit=10):
+        """Search multiple entities.
+
+        :param query: Your query
+        :param type: Set requested types. Available types : artist, label, release, track
+        :param autocomplete: Enable predictive search
+        :param start: Offset for pagination
+        :param limit: Size of generator batch
+        :type query: string
+        :type filters: dict
+        :type autocomplete: bool
+        :type start: int
+        :type limit: int
+        :return: Labels
+        :rtype: SearchGenerator
+
+        """
+
+        return SearchGenerator(self, 'search/', {
+            'query'         : query,
+            'type'          : ','.join(types) if types else None,
+            'autocomplete'  : 'true' if autocomplete else 'false',
+            'start'         : start,
+            'limit'         : limit,
+            'extras'        : 'true'
+        })
 
     def search_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
