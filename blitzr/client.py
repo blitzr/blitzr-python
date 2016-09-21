@@ -588,88 +588,60 @@ class BlitzrClient(object):
             'slug'  : slug,
         })
 
-    def get_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None,
-                   tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
-        """Search Events from the Blitzr API.
+    def search_event(self, query=None, filters={}, start=0, limit=10):
+        """Search Artist by query and filters.
 
-        :param country_code: The official country code
-        :param latitude: Latitude of a reference geopoint (use with radius)
-        :param longitude: Longitude of a reference geopoint (use with radius)
-        :param city: City where the event takes place (not compatible with country code)
-        :param venue: Venue where the event takes place
-        :param tag: Tag filter
-        :param dateStart: Date minimum
-        :param dateEnd: Date maximum
-        :param radius: Distance max from the reference geopoint (in km)
+        :param query: Your query
+        :param filters: Filter results. Available filters : artist, country_code, city, venue, date_start, date_end, latitude, longitude, radius
         :param start: Offset for pagination
         :param limit: Limit for pagination
-        :type country_code: string
-        :type latitude: float
-        :type longitude: float
-        :type city: string
-        :type venue: string
-        :type tag: string
-        :type dateStart: date
-        :type dateEnd: date
-        :type radius: int
+        :type query: string
+        :type filters: dict
         :type start: int
         :type limit: int
-        :return: Events
+        :return: Artists
         :rtype: list
 
         """
-        return self._request('events/', {
-            'country_code'  : country_code,
-            'latitude'      : latitude,
-            'longitude'     : longitude,
-            'city'          : city,
-            'venue'         : venue,
-            'tag'           : tag,
-            'date_start'    : date_start,
-            'date_end'      : date_end,
-            'radius'        : radius,
+        params = {
+            'query'         : query,
             'start'         : start,
-            'limit'         : limit
-        })
+            'limit'         : limit,
+            'extras'        : 'true'
+        }
 
-    def iter_events(self, country_code=None, latitude=None, longitude=None, city=None, venue=None,
-                    tag=None, date_start=None, date_end=None, radius=None, start=0, limit=10):
-        """Search Events from the Blitzr API.
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
 
-        :param country_code: The official country code
-        :param latitude: Latitude of a reference geopoint (use with radius)
-        :param longitude: Longitude of a reference geopoint (use with radius)
-        :param city: City where the event takes place (not compatible with country code)
-        :param venue: Venue where the event takes place
-        :param tag: Tag filter
-        :param dateStart: Date minimum
-        :param dateEnd: Date maximum
-        :param radius: Distance max from the reference geopoint (in km)
+        return self._request('search/event/', params)
+
+    def iter_search_event(self, query=None, filters={}, start=0, limit=10):
+        """Search Artist by query and filters.
+
+        :param query: Your query
+        :param filters: Filter results. Available filters : artist, country_code, city, venue, date_start, date_end, latitude, longitude, radius
         :param start: Offset for pagination
-        :param limit: Size of generator batch
-        :type country_code: string
-        :type latitude: float
-        :type longitude: float
-        :type city: string
-        :type venue: string
-        :type tag: string
-        :type dateStart: date
-        :type dateEnd: date
-        :type radius: int
+        :param limit: Size of generator batc
+        :type query: string
+        :type filters: dict
         :type start: int
         :type limit: int
-        :return: Events
-        :rtype: generator
+        :return: Artists
+        :rtype: SearchGenerator
 
         """
-        while True:
-            events = self.get_events(country_code, latitude, longitude, city, venue,
-                                     tag, date_start, date_end, radius, start, limit)
-            for event in events:
-                yield event
-            start += limit
-            if len(events) < limit:
-                break
+        params = {
+            'query'         : query,
+            'start'         : start,
+            'limit'         : limit,
+            'extras'        : 'true'
+        }
+
+        for f_name in filters:
+            params['filters[%s]' % (f_name)] = filters[f_name]
+
+        return SearchGenerator(self, 'search/event/', params)
+
 
 ###############################
 ##         Harmonia          ##
