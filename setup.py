@@ -1,21 +1,24 @@
 #!/usr/bin/python
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
-    from distutils.core import setup
+    from distutils.core import setup, find_packages
 
-config = {
-    'description': 'Blitzr Python Client',
-    'author': 'Blitzr',
-    'url': 'https://github.com/blitzr/blitzr-python',
-    'download_url': 'https://github.com/blitzr/blitzr-python/tarball/1.1.1',
-    'author_email': 'contact@blitzr.com',
-    'version': '1.1.1',
-    'install_requires': ['requests'],
-    'packages': ['blitzr'],
-    'scripts': [],
-    'name': 'blitzr'
-}
+VERSION='1.1.1'
 
-setup(**config)
+setup(name='blitzr',
+    version=VERSION,
+    description='Blitzr Python Client',
+    author='Blitzr',
+    url='https://github.com/blitzr/blitzr-python',
+    download_url='https://github.com/blitzr/blitzr-python/tarball/' + VERSION,
+    author_email='contact@blitzr.com',
+    install_requires=['requests'],
+    long_description=open('README.md').read(),
+    zip_safe=False,
+    packages=find_packages(exclude=['tests']),
+    scripts=[],
+    setup_requires=['nose>=1.0', 'sphinx'],
+    test_suite='nose.collector'
+)

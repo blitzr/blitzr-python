@@ -130,7 +130,7 @@ class BlitzrClient(object):
 
 
     def get_artist(self, uuid=None, slug=None, extras=[], extras_limit=None):
-        """Get an Artist from the Blitzr API.
+        """Get an Artist
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -153,7 +153,7 @@ class BlitzrClient(object):
         })
 
     def get_artist_aliases(self, uuid=None, slug=None):
-        """Get an Artist's aliases from the Blitzr API.
+        """Get aliases for an Artist
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -169,7 +169,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_aliases(self, uuid=None, slug=None):
-        """Get an Artist's aliases from the Blitzr API.
+        """Get an Artist's aliases
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -183,7 +183,7 @@ class BlitzrClient(object):
             yield alias
 
     def get_artist_bands(self, uuid=None, slug=None, start=0, limit=10):
-        """Get an Artist's bands from the Blitzr API.
+        """Get an Artist's bands
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -205,7 +205,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_bands(self, uuid=None, slug=None, start=0, limit=10):
-        """Get an Artist's bands from the Blitzr API.
+        """Get an Artist's bands
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -229,7 +229,7 @@ class BlitzrClient(object):
 
     def get_artist_biography(self, uuid=None, slug=None, lang=None, html_format=False,
                              url_scheme=None):
-        """Get an Artist's biography from the Blitzr API.
+        """Get an Artist's biography
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -254,7 +254,7 @@ class BlitzrClient(object):
         })
 
     def get_artist_events(self, uuid=None, slug=None, start=0, limit=10):
-        """Get an Artist's events from the Blitzr API.
+        """Get an Artist's events
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -276,7 +276,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_events(self, uuid=None, slug=None, start=0, limit=10):
-        """Get an Artist's events from the Blitzr API.
+        """Get an Artist's events
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -315,7 +315,7 @@ class BlitzrClient(object):
         })
 
     def get_artist_members(self, uuid=None, slug=None, start=0, limit=10):
-        """Get a Band's members from the Blitzr API.
+        """Get a Band's members
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -337,7 +337,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_members(self, uuid=None, slug=None, start=0, limit=10):
-        """Get a Band's members from the Blitzr API.
+        """Get a Band's members
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -360,7 +360,7 @@ class BlitzrClient(object):
                 break
 
     def get_artist_related(self, uuid=None, slug=None, start=0, limit=10):
-        """Get related Artists from the Blitzr API.
+        """Get related Artists
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -382,7 +382,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_related(self, uuid=None, slug=None, start=0, limit=10):
-        """Get related Artists from the Blitzr API.
+        """Get related Artists
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -406,7 +406,7 @@ class BlitzrClient(object):
 
     def get_artist_releases(self, uuid=None, slug=None, start=0, limit=10, release_type=None,
                             release_format=None, credited=False):
-        """Get an Artist's releases from the Blitzr API.
+        """Get an Artist's releases
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -438,7 +438,7 @@ class BlitzrClient(object):
 
     def iter_artist_releases(self, uuid=None, slug=None, start=0, limit=10,
                              release_type=None, release_format=None, credited=False):
-        """Get an Artist's releases from the Blitzr API.
+        """Get an Artist's releases
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -468,7 +468,7 @@ class BlitzrClient(object):
                 break
 
     def get_artist_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
-        """Get similar Artists from the Blitzr API.
+        """Get similar Artists
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -497,7 +497,7 @@ class BlitzrClient(object):
         return self._request('artist/similars/', params)
 
     def iter_artist_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
-        """Get similar Artists from the Blitzr API.
+        """Get similar Artists
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -522,7 +522,7 @@ class BlitzrClient(object):
                 break
 
     def get_artist_summary(self, uuid=None, slug=None):
-        """Get an Artist's summary from the Blitzr API.
+        """Get an Artist's summary
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -538,7 +538,7 @@ class BlitzrClient(object):
         })
 
     def get_artist_websites(self, uuid=None, slug=None):
-        """Get Artist's websites from the Blitzr API.
+        """Get Artist's websites
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -554,7 +554,7 @@ class BlitzrClient(object):
         })
 
     def iter_artist_websites(self, uuid=None, slug=None):
-        """Get Artist's websites from the Blitzr API.
+        """Get Artist's websites
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
@@ -573,7 +573,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_event(self, uuid=None, slug=None):
-        """Get an Event from the Blitzr API.
+        """Get an Event
 
         :param uuid: The Event UUID
         :param slug: The Event Slug
@@ -745,7 +745,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_label(self, uuid=None, slug=None, extras=[], extras_limit=None):
-        """Get a Label from the Blitzr API.
+        """Get a Label
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -767,7 +767,7 @@ class BlitzrClient(object):
         })
 
     def get_label_artists(self, uuid=None, slug=None, start=0, limit=10):
-        """Get a Label's artists from the Blitzr API.
+        """Get a Label's artists
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -789,7 +789,7 @@ class BlitzrClient(object):
         })
 
     def iter_label_artists(self, uuid=None, slug=None, start=0, limit=10):
-        """Get a Label's artists from the Blitzr API.
+        """Get a Label's artists
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -812,7 +812,7 @@ class BlitzrClient(object):
                 break
 
     def get_label_biography(self, uuid=None, slug=None, html_format=False, url_scheme=None):
-        """Get a Label's biography from the Blitzr API.
+        """Get a Label's biography
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -850,7 +850,7 @@ class BlitzrClient(object):
         })
 
     def get_label_releases(self, uuid=None, slug=None, release_format=None, start=0, limit=10):
-        """Get a Label's releases from the Blitzr API.
+        """Get a Label's releases
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -875,7 +875,7 @@ class BlitzrClient(object):
         })
 
     def iter_label_releases(self, uuid=None, slug=None, release_format=None, start=0, limit=10):
-        """Get a Label's releases from the Blitzr API.
+        """Get a Label's releases
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -900,7 +900,7 @@ class BlitzrClient(object):
                 break
 
     def get_label_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
-        """Get similar Labels from the Blitzr API.
+        """Get similar Labels
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -929,7 +929,7 @@ class BlitzrClient(object):
         return self._request('label/similars/', params)
 
     def iter_label_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
-        """Get similar Labels from the Blitzr API.
+        """Get similar Labels
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -954,7 +954,7 @@ class BlitzrClient(object):
                 break
 
     def get_label_websites(self, uuid=None, slug=None):
-        """Get Label's websites from the Blitzr API.
+        """Get Label's websites
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -970,7 +970,7 @@ class BlitzrClient(object):
         })
 
     def iter_label_websites(self, uuid=None, slug=None):
-        """Get Label's websites from the Blitzr API.
+        """Get Label's websites
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
@@ -1162,7 +1162,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_release(self, uuid=None, slug=None):
-        """Get a Release from the Blitzr API.
+        """Get a Release
 
         :param uuid: The Release UUID
         :param slug: The Release Slug
@@ -1510,7 +1510,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_shop_artist(self, product_type, uuid=None, slug=None):
-        """Get Artist's related products from the Blitzr API.
+        """Get Artist's related products
 
         :param product_type: The product's type (cd|lp|mp3|merch)
         :param uuid: The Artist UUID
@@ -1528,7 +1528,7 @@ class BlitzrClient(object):
         })
 
     def iter_shop_artist(self, product_type, uuid=None, slug=None):
-        """Get Artist's related products from the Blitzr API.
+        """Get Artist's related products
 
         :param product_type: The product's type (cd|lp|mp3|merch)
         :param uuid: The Artist UUID
@@ -1544,7 +1544,7 @@ class BlitzrClient(object):
             yield product
 
     def get_shop_label(self, product_type, uuid=None, slug=None):
-        """Get Label's related products from the Blitzr API.
+        """Get Label's related products
 
         :param product_type: The product's type (cd|lp|merch)
         :param uuid: The Label UUID
@@ -1562,7 +1562,7 @@ class BlitzrClient(object):
         })
 
     def iter_shop_label(self, product_type, uuid=None, slug=None):
-        """Get Label's related products from the Blitzr API.
+        """Get Label's related products
 
         :param product_type: The product's type (cd|lp|merch)
         :param uuid: The Label UUID
@@ -1578,7 +1578,7 @@ class BlitzrClient(object):
             yield product
 
     def get_shop_release(self, product_type, uuid=None, slug=None):
-        """Get Release's related products from the Blitzr API.
+        """Get Release's related products
 
         :param product_type: The product's type (cd|lp|mp3)
         :param uuid: The Release UUID
@@ -1596,7 +1596,7 @@ class BlitzrClient(object):
         })
 
     def iter_shop_release(self, product_type, uuid=None, slug=None):
-        """Get Release's related products from the Blitzr API.
+        """Get Release's related products
 
         :param product_type: The product's type (cd|lp|mp3)
         :param uuid: The Release UUID
@@ -1612,7 +1612,7 @@ class BlitzrClient(object):
             yield product
 
     def get_shop_track(self, uuid=None):
-        """Get Track's related products from the Blitzr API.
+        """Get Track's related products
 
         :param uuid: The Track UUID
         :type uuid: string
@@ -1625,7 +1625,7 @@ class BlitzrClient(object):
         })
 
     def iter_shop_track(self, uuid=None):
-        """Get Track's related products from the Blitzr API.
+        """Get Track's related products
 
         :param uuid: The Track UUID
         :type uuid: string
@@ -1641,7 +1641,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_tag(self, slug=None):
-        """Get a Tag from the Blitzr API.
+        """Get a Tag
 
         :param slug: The Tag slug
         :type slug: string
@@ -1738,7 +1738,7 @@ class BlitzrClient(object):
 ###############################
 
     def get_track(self, uuid=None):
-        """Get a Track from the Blitzr API.
+        """Get a Track
 
         :param uuid: The Track UUID
         :type uuid: string
@@ -1751,7 +1751,7 @@ class BlitzrClient(object):
         })
 
     def get_track_sources(self, uuid=None):
-        """Get a Track's Sources from the Blitzr API.
+        """Get a Track's Sources
 
         :param uuid: The Track UUID
         :type uuid: string
@@ -1764,7 +1764,7 @@ class BlitzrClient(object):
         })
 
     def iter_track_sources(self, uuid=None):
-        """Get a Track's Sources from the Blitzr API.
+        """Get a Track's Sources
 
         :param uuid: The Track UUID
         :type uuid: string
