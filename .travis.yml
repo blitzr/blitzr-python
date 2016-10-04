@@ -1,13 +1,23 @@
 language: python
 python:
-  - "2.6"
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "pypy"
-# command to install dependencies
-# script: python tests/test_all_of_the_units.py
-install: "pip install -r requirements.txt"
+  - '2.6'
+  - '2.7'
+  - '3.2'
+  - '3.3'
+  - pypy
+
+install: pip install -r requirements.txt
+
 branches:
   only:
-    - master
+  - master
+deploy:
+  provider: pypi
+  user: blitzr
+  password:
+    secure: TWEYpeVU77paRtg2+PcPjdjUbOcOa+cKS5469lKOeVdO5q4zjE8dSXqeAn3GeAD2TY32ME+lG2mWL5Pj2vfdcvhg5riI/GQQQl9KruXQx5E4MPIE7YO004DAdfulB1DVSCX9ABvcbTANC4hmqj/kw8khbhsAvgjYZXXzqR+QXAcFb6SmxjX6RAgvub60rz/Rc2aVdB8YMP7/7vfMcIdiDMaTqgsk9W8CVaZwPGG3xUGUBjDVJG/Jk4Tv6ai3Ykpcm6u2vLmDgOLz6BnRt8cXv8I6ezgAYxO3vseI+p5ui8dKoB8X2dZ5zZbRqQS29veussGTi1+uuuwItWBJfzmrPKm6/YaLYVIdfRK0XSQ/BUFwwuCRmdxnyOfS6QfBE5VP8MuXm9pMvStKWT6Ve5Lp8rKIy65THxb3YyPd2nxCcuTPJ13BrHmk/3OAO9tI4jc0OwiYJAk9IIwBC6+VQOJ0KIHfZ5TMQnIqK11hHLmanHrVRtd7Gg6KuEtw/nj4oC8ZLjTuLT9bjHurXnjLY9C1KEWVcWoOvqaFa71gcTaTIKyHp/Ujq9ZY2h1Ext8f41eAK8Gvl2/A1I6sWb3m2ZPcLZtv+DPoob5pLLraohr5jfpFP8j8UxdOLRbbdG2pCuwMVZI9QH2zOdo6b82xUjz4ONGDfq/CBYPFXcNpDXAkNww=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: blitzr/blitzr-python
+    branch: master
