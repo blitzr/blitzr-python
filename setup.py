@@ -5,6 +5,8 @@ try:
 except ImportError:
     from distutils.core import setup, find_packages
 
+import os
+
 VERSION=os.environ.get('TRAVIS_TAG', '1.1.1')
 
 setup(name='blitzr',
