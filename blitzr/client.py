@@ -96,7 +96,7 @@ class BlitzrClient(object):
 
     """
 
-    BASE_URL = "https://api.blitzr.com/"
+    BASE_URL = "https://api.blitzr.com%s"
 
     def __init__(self, api_key):
         """Construct the BlitzrClient with your API key."""
@@ -105,12 +105,11 @@ class BlitzrClient(object):
         else:
             raise ConfigurationException('api_key is missing.')
 
-    def _request(self, method, params):
+    def _request(self, method, params={}):
         """Base method to call the API with given params."""
-        url = self.BASE_URL + method
         params['key'] = self.api_key
         try:
-            req = requests.get(url=url, params=params)
+            req = requests.get(url=self.BASE_URL % method, params=params)
             req.raise_for_status()
             return req.json()
         except requests.exceptions.HTTPError:
@@ -145,7 +144,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('artist/', {
+        return self._request('/artist/', {
             'uuid'         : uuid,
             'slug'         : slug,
             'extras'       : ','.join(extras) if extras else None,
@@ -163,7 +162,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/aliases/', {
+        return self._request('/artist/aliases/', {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -197,7 +196,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/bands/', {
+        return self._request('/artist/bands/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'start' : start,
@@ -245,7 +244,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('artist/biography/', {
+        return self._request('/artist/biography/', {
             'slug'       : slug,
             'uuid'       : uuid,
             'lang'       : lang,
@@ -268,7 +267,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/events/', {
+        return self._request('/artist/events/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'start' : start,
@@ -309,7 +308,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('artist/harmonia/', {
+        return self._request('/artist/harmonia/', {
             'uuid'  : uuid,
             'slug'  : slug,
         })
@@ -329,7 +328,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/members/', {
+        return self._request('/artist/members/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'start' : start,
@@ -374,7 +373,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/related/', {
+        return self._request('/artist/related/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'start' : start,
@@ -426,7 +425,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/releases/', {
+        return self._request('/artist/releases/', {
             'uuid'      : uuid,
             'slug'      : slug,
             'start'     : start,
@@ -494,7 +493,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('artist/similars/', params)
+        return self._request('/artist/similars/', params)
 
     def iter_artist_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Artists
@@ -532,7 +531,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('artist/summary/', {
+        return self._request('/artist/summary/', {
             'uuid'  : uuid,
             'slug'  : slug,
         })
@@ -548,7 +547,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('artist/websites/', {
+        return self._request('/artist/websites/', {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -583,7 +582,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('event/', {
+        return self._request('/event/', {
             'uuid'  : uuid,
             'slug'  : slug,
         })
@@ -613,7 +612,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('search/event/', params)
+        return self._request('/search/event/', params)
 
     def iter_search_event(self, query=None, filters={}, start=0, limit=10):
         """Search Artist by query and filters.
@@ -658,7 +657,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('harmonia/artist/', {
+        return self._request('/harmonia/artist/', {
             'service_name'  : service_name,
             'service_id'    : service_id,
         })
@@ -674,7 +673,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('harmonia/release/', {
+        return self._request('/harmonia/release/', {
             'service_name'  : service_name,
             'service_id'    : service_id,
         })
@@ -690,7 +689,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('harmonia/label/', {
+        return self._request('/harmonia/label/', {
             'service_name'  : service_name,
             'service_id'    : service_id,
         })
@@ -712,7 +711,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('harmonia/searchbysource/', {
+        return self._request('/harmonia/searchbysource/', {
             'source_name'       : source_name,
             'source_id'         : source_id,
             'source_filters'    : ','.join(source_filters) if source_filters else None,
@@ -759,7 +758,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('label/', {
+        return self._request('/label/', {
             'uuid'         : uuid,
             'slug'         : slug,
             'extras'       : ','.join(extras) if extras else None,
@@ -781,7 +780,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('label/artists/', {
+        return self._request('/label/artists/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'start' : start,
@@ -826,7 +825,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('label/biography/', {
+        return self._request('/label/biography/', {
             'slug'       : slug,
             'uuid'       : uuid,
             'format'     : 'html' if html_format else None,
@@ -844,7 +843,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('label/harmonia/', {
+        return self._request('/label/harmonia/', {
             'uuid'  : uuid,
             'slug'  : slug,
         })
@@ -866,7 +865,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('label/releases/', {
+        return self._request('/label/releases/', {
             'uuid'      : uuid,
             'slug'      : slug,
             'format'    : release_format,
@@ -926,7 +925,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('label/similars/', params)
+        return self._request('/label/similars/', params)
 
     def iter_label_similar(self, uuid=None, slug=None, filters={}, start=0, limit=10):
         """Get similar Labels
@@ -964,7 +963,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('label/websites/', {
+        return self._request('/label/websites/', {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1000,7 +999,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/artist/', {
+        return self._request('/radio/artist/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'limit' : limit
@@ -1035,7 +1034,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/artist/similar/', {
+        return self._request('/radio/artist/similar/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'limit' : limit
@@ -1070,7 +1069,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/label/', {
+        return self._request('/radio/label/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'limit' : limit
@@ -1103,7 +1102,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/tag/', {
+        return self._request('/radio/tag/', {
             'slug'  : slug,
             'limit' : limit
         })
@@ -1135,7 +1134,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('radio/event/', {
+        return self._request('/radio/event/', {
             'uuid'  : uuid,
             'slug'  : slug,
             'limit' : limit
@@ -1172,7 +1171,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('release/', {
+        return self._request('/release/', {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1188,7 +1187,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('release/sources/', {
+        return self._request('/release/sources/', {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1229,7 +1228,7 @@ class BlitzrClient(object):
 
         """
 
-        return self._request('search/', {
+        return self._request('/search/', {
             'query'         : query,
             'type'          : ','.join(types) if types else None,
             'autocomplete'  : 'true' if autocomplete else 'false',
@@ -1293,7 +1292,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('search/artist/', params)
+        return self._request('/search/artist/', params)
 
     def iter_search_artist(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Artist by query and filters.
@@ -1353,7 +1352,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('search/label/', params)
+        return self._request('/search/label/', params)
 
     def iter_search_label(self, query=None, filters={}, autocomplete=False, start=0, limit=10):
         """Search Label by query and filters.
@@ -1415,7 +1414,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('search/release/', params)
+        return self._request('/search/release/', params)
 
     def iter_search_release(self, query=None, filters={}, autocomplete=False, start=0,
                             limit=10):
@@ -1475,7 +1474,7 @@ class BlitzrClient(object):
         for f_name in filters:
             params['filters[%s]' % (f_name)] = filters[f_name]
 
-        return self._request('search/track/', params)
+        return self._request('/search/track/', params)
 
     def iter_search_track(self, query=None, filters={}, start=0, limit=10):
         """Search Track by query and filters.
@@ -1522,7 +1521,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('buy/artist/' + product_type + '/', {
+        return self._request('/buy/artist/%s/' % product_type, {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1556,7 +1555,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('buy/label/' + product_type + '/', {
+        return self._request('/buy/label/%s/' % product_type, {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1590,7 +1589,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('buy/release/' + product_type + '/', {
+        return self._request('/buy/release/%s/' % product_type, {
             'uuid'  : uuid,
             'slug'  : slug
         })
@@ -1620,7 +1619,7 @@ class BlitzrClient(object):
         :rtype: generator
 
         """
-        return self._request('buy/track/', {
+        return self._request('/buy/track/', {
             'uuid'  : uuid
         })
 
@@ -1649,7 +1648,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('tag/', {
+        return self._request('/tag/', {
             'slug'  : slug
         })
 
@@ -1666,7 +1665,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('tag/artists/', {
+        return self._request('/tag/artists/', {
             'slug'  : slug,
             'start' : start,
             'limit' : limit
@@ -1706,7 +1705,7 @@ class BlitzrClient(object):
         :rtype: list
 
         """
-        return self._request('tag/releases/', {
+        return self._request('/tag/releases/', {
             'slug'  : slug,
             'start' : start,
             'limit' : limit
@@ -1746,7 +1745,7 @@ class BlitzrClient(object):
         :rtype: dictionary
 
         """
-        return self._request('track/', {
+        return self._request('/track/', {
             'uuid'  : uuid
         })
 
@@ -1759,7 +1758,7 @@ class BlitzrClient(object):
         :rtype: generator
 
         """
-        return self._request('track/sources/', {
+        return self._request('/track/sources/', {
             'uuid'  : uuid
         })
 
