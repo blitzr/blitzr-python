@@ -33,18 +33,6 @@ class TestBlitzrClient(unittest.TestCase):
         )
 
     @patch('requests.get')
-    def test_all_methods(self, mock_method):
-        blitzr_client = BlitzrClient(API_KEY)
-        for m in dir(BlitzrClient):
-            mf = BlitzrClient.__dict__.get(m)
-            if isinstance(mf, types.FunctionType) and m[0] != '_':
-                print(m)
-                with self.subTest(i=m):
-                    mf(blitzr_client, None)
-                    mock_method.assert_called()
-
-
-    @patch('requests.get')
     def test_get_artist_by_slug(self, mock_method):
 
         BlitzrClient(API_KEY).get_artist(slug='toto')
