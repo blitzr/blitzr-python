@@ -8,6 +8,8 @@ python:
 
 install: pip install .
 
+script: nosetests
+
 branches:
   only:
   - master
