@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
+import os
+
 try:
     from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup, find_packages
-
-import os
 
 VERSION=os.environ.get('TRAVIS_TAG', '1.1.1')
 
@@ -21,6 +21,6 @@ setup(name='blitzr',
     zip_safe=False,
     packages=find_packages(exclude=['tests']),
     scripts=[],
-    setup_requires=['nose>=1.0', 'sphinx'],
+    setup_requires=['nose>=1.0'],
     test_suite='nose.collector'
 )
