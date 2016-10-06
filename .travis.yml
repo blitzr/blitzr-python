@@ -22,3 +22,7 @@ deploy:
     distributions: sdist bdist_wheel
     repo: blitzr/blitzr-python
     branch: master
+
+notifications:
+  email:
+    - developer@blitzr.com
