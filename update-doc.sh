@@ -6,14 +6,14 @@ shopt -s extglob # enable extglob shell option to use extended pattern matching 
 SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
-function doCompile {
-    pip install Sphinx
-    sphinx-build source docs
-}
-
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
-    echo "Skipping deploy; just building doc."
+if [["$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH"]]; then
+    echo "Skipping doc building"
+    exit 0
+fi
+
+if [[ -z "$TRAVIS_TAG" ]]; then
+    echo "Not a tag, Skipping doc building"
     exit 0
 fi
 
