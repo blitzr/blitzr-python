@@ -5,13 +5,19 @@ python:
   - '3.3'
   - pypy
 
+env:
+  global:
+  - ENCRYPTION_LABEL: "107d924ff7fa"
+  - COMMIT_AUTHOR_EMAIL: "travis_blitzr-python@blitzr.com"
+
 install: pip install .
 
-script: nosetests
+script:
+  - nosetests
 
-branches:
-  only:
-  - master
+after_success:
+  - ./update-doc.sh
+
 deploy:
   provider: pypi
   user: blitzr
@@ -23,6 +29,6 @@ deploy:
     repo: blitzr/blitzr-python
     branch: master
 
-notifications:
-  email:
-    - developer@blitzr.com
+# notifications:
+#   email:
+#     - developer@blitzr.com
