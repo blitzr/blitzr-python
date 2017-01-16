@@ -133,8 +133,7 @@ class BlitzrClient(object):
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
-        :param extras: Artist extras : aliases, websites, biography, last_releases,
-            next_events, relations
+        :param extras: Artist extras : aliases, websites, biography, relations
         :param extras_limit: Limit for iterable extras : last_releases, next_events (max is 10)
         :type uuid: string
         :type slug: string
@@ -226,7 +225,7 @@ class BlitzrClient(object):
             if len(bands) < limit:
                 break
 
-    def get_artist_biography(self, uuid=None, slug=None, lang=None, html_format=False,
+    def get_artist_biography(self, uuid=None, slug=None, lang=None, license=None, source=None, html_format=False,
                              url_scheme=None):
         """Get an Artist's biography
 
@@ -248,6 +247,8 @@ class BlitzrClient(object):
             'slug'       : slug,
             'uuid'       : uuid,
             'lang'       : lang,
+            'license'    : license,
+            'source'     : source,
             'format'     : 'html' if html_format else None,
             'url_scheme' : url_scheme
         })
@@ -748,7 +749,7 @@ class BlitzrClient(object):
 
         :param uuid: The Label UUID
         :param slug: The Label Slug
-        :param extras: Label extras : biography, websites, artists, last_releases, relations
+        :param extras: Label extras : biography, websites, relations
         :param extras_limit: An int to set the limit of the lists fetched by extras.
         :type uuid: string
         :type slug: string
@@ -1209,33 +1210,6 @@ class BlitzrClient(object):
 ###############################
 ##          Search           ##
 ###############################
-
-    def search(self, query=None, types=[], autocomplete=False, start=0, limit=10):
-        """Search multiple entities.
-
-        :param query: Your query
-        :param type: Set requested types. Available types : artist, label, release, track
-        :param autocomplete: Enable predictive search
-        :param start: Offset for pagination
-        :param limit: Limit for pagination
-        :type query: string
-        :type type: array
-        :type autocomplete: bool
-        :type start: int
-        :type limit: int
-        :return: Results
-        :rtype: list
-
-        """
-
-        return self._request('/search/', {
-            'query'         : query,
-            'type'          : ','.join(types) if types else None,
-            'autocomplete'  : 'true' if autocomplete else 'false',
-            'start'         : start,
-            'limit'         : limit,
-            'extras'        : 'true'
-        })
 
     def iter_search(self, query=None, types=[], autocomplete=False, start=0, limit=10):
         """Search multiple entities.
