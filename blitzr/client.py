@@ -133,12 +133,10 @@ class BlitzrClient(object):
 
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
-        :param extras: Artist extras : aliases, websites, biography, relations
-        :param extras_limit: Limit for iterable extras : last_releases, next_events (max is 10)
+        :param extras: Artist extras : aliases, websites, relations
         :type uuid: string
         :type slug: string
         :type extras: array
-        :type extras_limit: int
         :return: Artist
         :rtype: dictionary
 
@@ -232,15 +230,19 @@ class BlitzrClient(object):
         :param uuid: The Artist UUID
         :param slug: The Artist Slug
         :param lang: Biography language (if available) (fr|en)
+        :param source: Biography source (if available) (discogs|wikipedia)
+        :param license: Biography source (if available) (cc0|cc-by-sa)
         :param html_format: True for HTML markup in the biography
         :param url_scheme: Urlencoded links format
         :type uuid: string
         :type slug: string
         :type lang: string
+        :type source: string
+        :type license: string
         :type html_format: bool
         :type url_scheme: string
         :return: Biography
-        :rtype: dictionary
+        :rtype: list
 
         """
         return self._request('/artist/biography/', {
@@ -750,11 +752,9 @@ class BlitzrClient(object):
         :param uuid: The Label UUID
         :param slug: The Label Slug
         :param extras: Label extras : biography, websites, relations
-        :param extras_limit: An int to set the limit of the lists fetched by extras.
         :type uuid: string
         :type slug: string
         :type extras: array
-        :type extras_limit: int
         :return: Label
         :rtype: dictionary
 
